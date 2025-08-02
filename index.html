@@ -36,7 +36,17 @@ body {
       margin: 20px auto;
       border-radius: 25px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
+    park-logo {
+  width: 250px;
+  height: auto;
+  border-radius: 15px;
+  transition: transform 0.2s ease;
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+}
+
+.park-logo:hover {
+  transform: scale(1.05);
+}
 
     .button-container {
       display: flex;
@@ -67,14 +77,23 @@ body {
 <body>
 
   <img class="logo" src="Disneyworld Home logo.png" alt="Disney Family Header" />
-
-  <div class="button-container">
-    <button class="nav-button" onclick="location.href='port_orleans.html'">Port Orleans: French Quarter</button>
-    <button class="nav-button" onclick="location.href='magic_kingdom.html'">Magic Kingdom</button>
-    <button class="nav-button" onclick="location.href='epcot.html'">EPCOT</button>
-    <button class="nav-button" onclick="location.href='hollywood_studios.html'">Hollywood Studios</button>
-    <button class="nav-button" onclick="location.href='animal_kingdom.html'">Animal Kingdom</button>
-  </div>
+<div class="button-container">
+  <a href="port_orleans.html">
+    <img src="French Quarter.png" alt="Port Orleans" class="park-logo" />
+  </a>
+  <a href="magic_kingdom.html">
+    <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" />
+  </a>
+  <a href="epcot.html">
+    <img src="Epcot.png" alt="EPCOT" class="park-logo" />
+  </a>
+  <a href="hollywood_studios.html">
+    <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" />
+  </a>
+  <a href="animal_kingdom.html">
+    <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" />
+  </a>
+</div>
 
   <div class="banner">Let the Magic Begin!</div>
 </body>
