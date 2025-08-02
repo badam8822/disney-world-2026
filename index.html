@@ -11,6 +11,11 @@
       background: linear-gradient(to bottom right, #ffffff, #f9f9f9);
       color: #000;
       text-align: center;
+      transition: opacity 1s ease;
+    }
+
+    body.fade-out {
+      opacity: 0;
     }
 
     .banner {
@@ -25,7 +30,7 @@
     }
 
     .logo {
-      max-width: 58.5%; /* 65% of original 90% */
+      max-width: 58.5%;
       height: auto;
       margin: 30px auto 10px;
       border-radius: 25px;
@@ -41,41 +46,102 @@
     }
 
     .park-logo {
-      width: 162.5px; /* 65% of 250px */
+      width: 162.5px;
       height: auto;
       border-radius: 15px;
       background-color: transparent;
       transition: transform 0.2s ease;
       box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
     }
 
     .park-logo:hover {
       transform: scale(1.05);
     }
+
+    canvas#fairy-dust {
+      position: fixed;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+    }
   </style>
 </head>
 <body>
+  <canvas id="fairy-dust"></canvas>
 
   <img class="logo" src="Disneyworld Home logo.png" alt="Disney Family Header" />
 
   <div class="button-container">
-    <a href="port_orleans.html">
-      <img src="French Quarter.png" alt="Port Orleans" class="park-logo" />
-    </a>
-    <a href="magic_kingdom.html">
-      <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" />
-    </a>
-    <a href="epcot.html">
-      <img src="Epcot.png" alt="EPCOT" class="park-logo" />
-    </a>
-    <a href="hollywood_studios.html">
-      <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" />
-    </a>
-    <a href="animal_kingdom.html">
-      <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" />
-    </a>
+    <img src="French Quarter.png" alt="Port Orleans" class="park-logo" onclick="startMagic('port_orleans.html')" />
+    <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" onclick="startMagic('magic_kingdom.html')" />
+    <img src="Epcot.png" alt="EPCOT" class="park-logo" onclick="startMagic('epcot.html')" />
+    <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" onclick="startMagic('hollywood_studios.html')" />
+    <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" onclick="startMagic('animal_kingdom.html')" />
   </div>
 
   <div class="banner">Let the Magic Begin!</div>
+
+  <script>
+    const canvas = document.getElementById('fairy-dust');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function createParticle(x, y) {
+      return {
+        x,
+        y,
+        radius: Math.random() * 2 + 1,
+        alpha: 1,
+        dx: (Math.random() - 0.5) * 2,
+        dy: Math.random() * -2 - 1,
+        color: ['#fffacd', '#ffe4e1', '#ffd700', '#f0e68c'][Math.floor(Math.random() * 4)]
+      };
+    }
+
+    function sprinkle(x, y, count = 60) {
+      for (let i = 0; i < count; i++) {
+        particles.push(createParticle(x, y));
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.alpha > 0.05);
+      particles.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+        p.alpha -= 0.02;
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    function startMagic(destination) {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      sprinkle(centerX, centerY);
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = destination;
+      }, 1100); // allow fade to complete
+    }
+  </script>
 </body>
 </html>
