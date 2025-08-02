@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Magic Kingdom</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom right, #ffffff, #f9f9f9);
+      color: #000;
+      text-align: center;
+    }
+    .logo {
+      max-width: 50%;
+      height: auto;
+      margin: 20px auto;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .nav-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .nav-logo {
+      width: 160px;
+      height: auto;
+      border-radius: 15px;
+      transition: transform 0.2s ease;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .nav-logo:hover {
+      transform: scale(1.05);
+    }
+    .banner {
+      background-color: #e62429;
+      padding: 20px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      border-top: 5px solid #000;
+      border-bottom: 5px solid #000;
+      color: #ffcc00;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <img class="logo" src="Magic Kingdom.png" alt="Magic Kingdom Logo" />
+
+  <div class="nav-container">
+    <a href="index.html">
+      <img src="Disneyworld Home logo.png" alt="Home" class="nav-logo" />
+    </a>
+    <a href="port_orleans.html">
+      <img src="French Quarter.png" alt="Port Orleans" class="nav-logo" />
+    </a>
+    <a href="epcot.html">
+      <img src="Epcot.png" alt="EPCOT" class="nav-logo" />
+    </a>
+    <a href="hollywood_studios.html">
+      <img src="Hollywood studios.png" alt="Hollywood Studios" class="nav-logo" />
+    </a>
+    <a href="animal_kingdom.html">
+      <img src="Animal Kingdom.png" alt="Animal Kingdom" class="nav-logo" />
+    </a>
+  </div>
+
+  <div class="banner">Magic Kingdom</div>
+</body>
+</html>
