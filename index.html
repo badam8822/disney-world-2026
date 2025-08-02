@@ -74,11 +74,11 @@
   <img class="logo" src="Disneyworld Home logo.png" alt="Disney Family Header" />
 
   <div class="button-container">
-    <img src="French Quarter.png" alt="Port Orleans" class="park-logo" onclick="startMagic('port_orleans.html')" />
-    <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" onclick="startMagic('magic_kingdom.html')" />
-    <img src="Epcot.png" alt="EPCOT" class="park-logo" onclick="startMagic('epcot.html')" />
-    <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" onclick="startMagic('hollywood_studios.html')" />
-    <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" onclick="startMagic('animal_kingdom.html')" />
+    <img src="French Quarter.png" alt="Port Orleans" class="park-logo" onclick="startMagic(event, 'port_orleans.html')" />
+    <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" onclick="startMagic(event, 'magic_kingdom.html')" />
+    <img src="Epcot.png" alt="EPCOT" class="park-logo" onclick="startMagic(event, 'epcot.html')" />
+    <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" onclick="startMagic(event, 'hollywood_studios.html')" />
+    <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" onclick="startMagic(event, 'animal_kingdom.html')" />
   </div>
 
   <div class="banner">Let the Magic Begin!</div>
@@ -97,19 +97,21 @@
     resizeCanvas();
 
     function createParticle(x, y) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 6 + 2; // 250% more powerful burst
       return {
         x,
         y,
-        radius: Math.random() * 4 + 3, // Bigger sparkles
+        radius: Math.random() * 6 + 4, // larger stars
         alpha: 1,
-        dx: (Math.random() - 0.5) * 2,
-        dy: Math.random() * -2.5 - 0.5,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
         rotation: Math.random() * 2 * Math.PI,
         color: ['#ff69b4', '#dda0dd', '#ffcc00'][Math.floor(Math.random() * 3)]
       };
     }
 
-    function sprinkle(x, y, count = 80) {
+    function sprinkle(x, y, count = 200) {
       for (let i = 0; i < count; i++) {
         particles.push(createParticle(x, y));
       }
@@ -140,7 +142,7 @@
       particles.forEach(p => {
         p.x += p.dx;
         p.y += p.dy;
-        p.alpha -= 0.015;
+        p.alpha -= 0.012;
         p.rotation += 0.1;
         drawStar(p.x, p.y, p.radius, p.color, p.alpha, p.rotation);
       });
@@ -149,10 +151,12 @@
 
     animateParticles();
 
-    function startMagic(destination) {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      sprinkle(centerX, centerY);
+    function startMagic(event, destination) {
+      const rect = event.target.getBoundingClientRect();
+      const clickX = rect.left + rect.width / 2;
+      const clickY = rect.top + rect.height / 2;
+
+      sprinkle(clickX, clickY, 200); // more particles = bigger effect
       document.body.classList.add('fade-out');
       setTimeout(() => {
         window.location.href = destination;
