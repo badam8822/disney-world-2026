@@ -100,18 +100,38 @@
       return {
         x,
         y,
-        radius: Math.random() * 2 + 1,
+        radius: Math.random() * 4 + 3, // Bigger sparkles
         alpha: 1,
         dx: (Math.random() - 0.5) * 2,
-        dy: Math.random() * -2 - 1,
-        color: ['#fffacd', '#ffe4e1', '#ffd700', '#f0e68c'][Math.floor(Math.random() * 4)]
+        dy: Math.random() * -2.5 - 0.5,
+        rotation: Math.random() * 2 * Math.PI,
+        color: ['#ff69b4', '#dda0dd', '#ffcc00'][Math.floor(Math.random() * 3)]
       };
     }
 
-    function sprinkle(x, y, count = 60) {
+    function sprinkle(x, y, count = 80) {
       for (let i = 0; i < count; i++) {
         particles.push(createParticle(x, y));
       }
+    }
+
+    function drawStar(x, y, radius, color, alpha, rotation) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        ctx.lineTo(0, radius);
+        ctx.translate(0, radius);
+        ctx.rotate((Math.PI * 2) / 10);
+        ctx.lineTo(0, -radius);
+        ctx.translate(0, -radius);
+        ctx.rotate(-((Math.PI * 6) / 10));
+      }
+      ctx.fill();
+      ctx.restore();
     }
 
     function animateParticles() {
@@ -120,14 +140,10 @@
       particles.forEach(p => {
         p.x += p.dx;
         p.y += p.dy;
-        p.alpha -= 0.02;
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
+        p.alpha -= 0.015;
+        p.rotation += 0.1;
+        drawStar(p.x, p.y, p.radius, p.color, p.alpha, p.rotation);
       });
-      ctx.globalAlpha = 1;
       requestAnimationFrame(animateParticles);
     }
 
@@ -140,7 +156,7 @@
       document.body.classList.add('fade-out');
       setTimeout(() => {
         window.location.href = destination;
-      }, 1100); // allow fade to complete
+      }, 1200);
     }
   </script>
 </body>
