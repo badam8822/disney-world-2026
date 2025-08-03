@@ -228,7 +228,7 @@
         }
       }
 
-      if (daytype === "backfrompark") {
+      
       if (daytype === "backfrompark") {
         const pstyle = document.querySelector('input[name="parkreturn"]:checked')?.value;
         if (!pstyle) return alert("Please select an evening option.");
@@ -243,10 +243,8 @@
         } else {
           plan += "<li>Take the scenic boat ride to Disney Springs for late-night treats or to catch live music at the Waterside Stage.</li>";
         }
-      }
-
-
       } else if (daytype === "departure") {
+
         const dstyle = document.querySelector('input[name="departurestyle"]:checked')?.value;
         if (!dstyle) return alert("Please select a departure style.");
         if (dstyle === "bigbreakfast") {
