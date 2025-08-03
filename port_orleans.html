@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Port Orleans French Quarter</title>
+  <title>Plan Your Port Orleans Day</title>
   <style>
     body {
       margin: 0;
@@ -63,7 +62,12 @@
       width: 90%;
       max-width: 500px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
       text-align: left;
+    }
+
+    .card.active {
+      display: block;
     }
 
     .card h2 {
@@ -81,11 +85,11 @@
     button {
       background-color: #e62429;
       color: white;
-      font-size: 1.3rem;
-      padding: 12px 25px;
+      font-size: 1.1rem;
+      padding: 10px 20px;
       border: none;
       border-radius: 10px;
-      margin: 30px 0;
+      margin-top: 15px;
       cursor: pointer;
       box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
     }
@@ -128,92 +132,116 @@
     </a>
   </div>
 
-  <h2 style="color:#e62429;">Plan Your Port Orleans Day</h2>
-
-  <form id="planner-form">
-    <div class="card">
-      <h2>1. What time are you arriving?</h2>
-      <label><input type="radio" name="arrival" value="morning" required /> Before 11:00 AM</label>
-      <label><input type="radio" name="arrival" value="midday" /> 11:00 AM – 3:00 PM</label>
-      <label><input type="radio" name="arrival" value="evening" /> After 3:00 PM</label>
+  <div id="cards-container">
+    <div class="card active" data-card="1">
+      <h2>What kind of day are you planning?</h2>
+      <label><input type="radio" name="daytype" value="arrival" /> Arrival Day</label>
+      <label><input type="radio" name="daytype" value="parkbreak" /> Midday Park Break</label>
+      <label><input type="radio" name="daytype" value="departure" /> Departure Day</label>
+      <button onclick="nextCard()">Next</button>
     </div>
 
-    <div class="card">
-      <h2>2. What are you most in the mood for when you arrive?</h2>
-      <label><input type="radio" name="mood" value="food" required /> Getting food ASAP</label>
-      <label><input type="radio" name="mood" value="pool" /> Pool time & relaxation</label>
-      <label><input type="radio" name="mood" value="explore" /> Exploring the resort and walking path</label>
+    <div class="card" data-card="2" data-parent="arrival">
+      <h2>What time are you arriving?</h2>
+      <label><input type="radio" name="arrivaltime" value="morning" /> Before 11:00 AM</label>
+      <label><input type="radio" name="arrivaltime" value="afternoon" /> 11:00 AM – 4:00 PM</label>
+      <label><input type="radio" name="arrivaltime" value="evening" /> After 4:00 PM</label>
+      <button onclick="nextCard()">Next</button>
     </div>
 
-    <div class="card">
-      <h2>3. During breaks from the parks, you want to...</h2>
-      <label><input type="radio" name="breaks" value="nap" required /> Rest and nap in the room</label>
-      <label><input type="radio" name="breaks" value="pool" /> Swim and enjoy the splash area</label>
-      <label><input type="radio" name="breaks" value="boatride" /> Take a boat ride to Disney Springs</label>
+    <div class="card" data-card="2" data-parent="parkbreak">
+      <h2>What kind of break do you want?</h2>
+      <label><input type="radio" name="breaktype" value="nap" /> Nap in room</label>
+      <label><input type="radio" name="breaktype" value="pool" /> Swim at Doubloon Lagoon</label>
+      <label><input type="radio" name="breaktype" value="boat" /> Boat to Disney Springs</label>
+      <button onclick="nextCard()">Next</button>
     </div>
 
-    <div class="card">
-      <h2>4. What’s your ideal departure day vibe?</h2>
-      <label><input type="radio" name="departure" value="bigbreakfast" required /> Big breakfast before heading out</label>
-      <label><input type="radio" name="departure" value="quickpack" /> Quick bite + pack up fast</label>
-      <label><input type="radio" name="departure" value="slowwander" /> Slow walk around the resort one last time</label>
+    <div class="card" data-card="2" data-parent="departure">
+      <h2>How do you want to spend your last hours?</h2>
+      <label><input type="radio" name="departurestyle" value="bigbreakfast" /> Big breakfast & walk</label>
+      <label><input type="radio" name="departurestyle" value="quickpack" /> Pack fast & go</label>
+      <label><input type="radio" name="departurestyle" value="lastwander" /> One last boat ride or walk</label>
+      <button onclick="nextCard()">Next</button>
     </div>
-
-    <button type="submit">Build My Day!</button>
-  </form>
+  </div>
 
   <div id="plan-output"></div>
+  <button onclick="resetForm()">Start Over</button>
 
   <script>
-    const form = document.getElementById('planner-form');
-    const output = document.getElementById('plan-output');
+    let currentCard = 1;
+    let selectedDayType = null;
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
+    function nextCard() {
+      const cards = document.querySelectorAll('.card');
+      cards[currentCard - 1].classList.remove('active');
 
-      const data = new FormData(form);
-      const arrival = data.get('arrival');
-      const mood = data.get('mood');
-      const breaks = data.get('breaks');
-      const departure = data.get('departure');
-
-      let plan = "<h2>Your Personalized Port Orleans Day</h2><ul>";
-
-      if (arrival === "morning") {
-        plan += "<li>Drop your bags early and head straight to Scat Cat's Café for a Mickey beignet breakfast.</li>";
-      } else if (arrival === "midday") {
-        plan += "<li>Grab a quick bite at Sassagoula Floatworks and check out the gift shop.</li>";
-      } else {
-        plan += "<li>Head to the pool for evening lights or take a slow walk along the Sassagoula River trail.</li>";
+      if (currentCard === 1) {
+        selectedDayType = document.querySelector('input[name="daytype"]:checked')?.value;
+        if (!selectedDayType) return alert("Please select a day type.");
       }
 
-      if (mood === "food") {
-        plan += "<li>Consider mobile ordering from Sassagoula Floatworks to avoid a line.</li>";
-      } else if (mood === "pool") {
-        plan += "<li>Bring your swimsuit in your carry-on! The Doubloon Lagoon is ready when you are.</li>";
+      const next = Array.from(cards).find(c => c.dataset.card === "2" && c.dataset.parent === selectedDayType);
+      if (next) {
+        next.classList.add('active');
+        currentCard++;
       } else {
-        plan += "<li>Check out the resort grounds and snap a few photos with the fun Mardi Gras theming.</li>";
+        showPlan();
+      }
+    }
+
+    function showPlan() {
+      const daytype = selectedDayType;
+      let plan = "<h2>Your Custom Port Orleans Plan</h2><ul>";
+
+      if (daytype === "arrival") {
+        const time = document.querySelector('input[name="arrivaltime"]:checked')?.value;
+        if (!time) return alert("Please select an arrival time.");
+        if (time === "morning") {
+          plan += "<li>Check bags early. Grab breakfast at Scat Cat's Café (try the beignets!).</li>";
+          plan += "<li>Swim at Doubloon Lagoon or explore the river path.</li>";
+        } else if (time === "afternoon") {
+          plan += "<li>Check in, unpack, then mobile order lunch from Sassagoula Floatworks.</li>";
+          plan += "<li>Take a boat ride to Disney Springs for snacks or shopping!</li>";
+        } else {
+          plan += "<li>Relax with a walk through the courtyard. Then visit the bar for live jazz if available.</li>";
+        }
       }
 
-      if (breaks === "nap") {
-        plan += "<li>Plan to return to the room midday for a quiet recharge (great for the 4-year-old!).</li>";
-      } else if (breaks === "pool") {
-        plan += "<li>Try the splash pad or the pool slide before heading back to the parks.</li>";
-      } else {
-        plan += "<li>Hop on the boat to Disney Springs — a relaxing ride and perfect for snacks or shopping.</li>";
+      if (daytype === "parkbreak") {
+        const btype = document.querySelector('input[name="breaktype"]:checked')?.value;
+        if (!btype) return alert("Please select a break activity.");
+        if (btype === "nap") {
+          plan += "<li>Return to the room by 1:30 PM. Turn on cartoons and recharge for the evening.</li>";
+        } else if (btype === "pool") {
+          plan += "<li>Visit the Doubloon Lagoon pool. Bring a refillable mug and enjoy frozen lemonade.</li>";
+        } else {
+          plan += "<li>Catch the boat to Disney Springs. It's peaceful and takes ~15–20 mins.</li>";
+        }
       }
 
-      if (departure === "bigbreakfast") {
-        plan += "<li>Grab a full breakfast from Floatworks or try Tiana’s Banana Foster French Toast!</li>";
-      } else if (departure === "quickpack") {
-        plan += "<li>Get something to-go from the bakery and focus on getting packed.</li>";
-      } else {
-        plan += "<li>Leave a little time for one last photo walk and soak in the quiet charm.</li>";
+      if (daytype === "departure") {
+        const dstyle = document.querySelector('input[name="departurestyle"]:checked')?.value;
+        if (!dstyle) return alert("Please select a departure style.");
+        if (dstyle === "bigbreakfast") {
+          plan += "<li>Enjoy a hearty breakfast from Sassagoula Floatworks (banana foster French toast!).</li>";
+          plan += "<li>Stroll the resort trail for final photos before checkout.</li>";
+        } else if (dstyle === "quickpack") {
+          plan += "<li>Pack early, grab beignets or bakery items to-go, and prepare for travel.</li>";
+        } else {
+          plan += "<li>Take one final boat ride before calling the bell service for luggage pickup.</li>";
+        }
       }
 
       plan += "</ul>";
-      output.innerHTML = plan;
-    });
+      document.getElementById("cards-container").innerHTML = "";
+      document.getElementById("plan-output").innerHTML = plan;
+    }
+
+    function resetForm() {
+      window.location.reload();
+    }
   </script>
 </body>
 </html>
