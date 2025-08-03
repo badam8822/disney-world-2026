@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Magic Kingdom Planner</title>
   <style>
     body {
@@ -16,6 +16,7 @@
       text-align: center;
       position: relative;
     }
+
     body::before {
       content: "";
       position: fixed;
@@ -23,6 +24,7 @@
       background: rgba(255, 255, 255, 0.8);
       z-index: -1;
     }
+
     .logo {
       max-width: 58.5%;
       height: auto;
@@ -30,6 +32,7 @@
       border-radius: 25px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
+
     .button-container {
       display: flex;
       flex-wrap: wrap;
@@ -37,6 +40,7 @@
       gap: 20px;
       margin: 20px 0;
     }
+
     .park-logo {
       width: 162.5px;
       height: auto;
@@ -46,9 +50,11 @@
       box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
       cursor: pointer;
     }
+
     .park-logo:hover {
       transform: scale(1.05);
     }
+
     .card {
       background-color: white;
       border-radius: 10px;
@@ -59,15 +65,18 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       text-align: left;
     }
+
     select, button {
       padding: 10px;
       margin-top: 10px;
       font-size: 1rem;
       width: 100%;
     }
+
     .hidden {
       display: none;
     }
+
     #recommendations {
       background-color: #fff3cd;
       border-left: 6px solid #ffa500;
@@ -79,12 +88,14 @@
       max-width: 700px;
       text-align: left;
     }
+
     h1 {
       font-size: 2.5rem;
       color: #da1884;
       margin-top: 20px;
     }
- #fairy-dust {
+
+    #fairy-dust {
       position: fixed;
       top: 0;
       left: 0;
@@ -127,39 +138,47 @@
   <div id="recommendations" class="hidden"></div>
 
   <script>
+    function scrollToCard(cardId) {
+      const el = document.getElementById(cardId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     function nextFlashcard() {
       const type = document.getElementById('dayType').value;
       const card2 = document.getElementById('card2');
       let html = '';
 
-    if (type === 'ropeDrop') {
-  html = `
-    <label><strong>Start your day with a character breakfast?</strong></label><br>
-    <select id="breakfast" onchange="showCard4()">
-      <option value="">-- Choose --</option>
-      <option value="crystal">Crystal Palace with Pooh & Friends</option>
-      <option value="quick">Quick bite before the rides</option>
-    </select>`;
-} else if (type === 'relaxed' || type === 'afterNap') {
-  html = `
-    <label><strong>What sounds like a good start?</strong></label><br>
-    <select id="startRelaxed" onchange="showCard4()">
-      <option value="">-- Choose --</option>
-      <option value="gentle">Gentle ride (small world, PeopleMover)</option>
-      <option value="snack">Snack and show</option>
-    </select>`;
-} else if (type === 'departure') {
-  html = `
-    <label><strong>One last hurrah?</strong></label><br>
-    <select id="departurePlan" onchange="showCard4()">
-      <option value="">-- Choose --</option>
-      <option value="rides">Peter Pan + Jungle Cruise</option>
-      <option value="chill">Wander, shop, take photos</option>
-    </select>`;
-}
+      if (type === 'ropeDrop') {
+        html = `
+          <label><strong>Start your day with a character breakfast?</strong></label><br>
+          <select id="breakfast" onchange="showCard4()">
+            <option value="">-- Choose --</option>
+            <option value="crystal">Crystal Palace with Pooh & Friends</option>
+            <option value="quick">Quick bite before the rides</option>
+          </select>`;
+      } else if (type === 'relaxed' || type === 'afterNap') {
+        html = `
+          <label><strong>What sounds like a good start?</strong></label><br>
+          <select id="startRelaxed" onchange="showCard4()">
+            <option value="">-- Choose --</option>
+            <option value="gentle">Gentle ride (small world, PeopleMover)</option>
+            <option value="snack">Snack and show</option>
+          </select>`;
+      } else if (type === 'departure') {
+        html = `
+          <label><strong>One last hurrah?</strong></label><br>
+          <select id="departurePlan" onchange="showCard4()">
+            <option value="">-- Choose --</option>
+            <option value="rides">Peter Pan + Jungle Cruise</option>
+            <option value="chill">Wander, shop, take photos</option>
+          </select>`;
+      }
 
       card2.innerHTML = html;
       card2.classList.remove("hidden");
+      scrollToCard("card2");
 
       document.getElementById("card3").innerHTML = `
         <label><strong>Will you use Genie+ Lightning Lanes?</strong></label><br>
@@ -169,10 +188,11 @@
           <option value="no">No – Going with the flow</option>
         </select>`;
       document.getElementById("card3").classList.remove("hidden");
+      scrollToCard("card3");
     }
 
     function showCard4() {
-      const genie = document.getElementById('genie').value;
+      const genie = document.getElementById('genie')?.value;
       const card4 = document.getElementById('card4');
       let html = '';
 
@@ -199,6 +219,7 @@
 
       card4.innerHTML = html;
       card4.classList.remove("hidden");
+      scrollToCard("card4");
 
       document.getElementById("card5").innerHTML = `
         <label><strong>How do you want to end your day?</strong></label><br>
@@ -211,6 +232,7 @@
         </select>`;
       document.getElementById("card5").classList.remove("hidden");
       document.getElementById("buildButton").classList.remove("hidden");
+      scrollToCard("card5");
     }
 
     function generateMKDay() {
@@ -247,13 +269,20 @@
       summary += `</ul>`;
       document.getElementById("recommendations").innerHTML = summary;
       document.getElementById("recommendations").classList.remove("hidden");
+      scrollToCard("recommendations");
     }
 
+    // Fairy dust particle background
     const canvas = document.getElementById('fairy-dust');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
     function createParticle(x, y) {
       const angle = Math.random() * Math.PI * 2;
       const speed = Math.random() * 6 + 2;
@@ -267,11 +296,13 @@
         color: ['#ff69b4', '#dda0dd', '#ffcc00'][Math.floor(Math.random() * 3)]
       };
     }
+
     function sprinkle(x, y, count = 200) {
       for (let i = 0; i < count; i++) {
         particles.push(createParticle(x, y));
       }
     }
+
     function drawStar(x, y, radius, color, alpha, rotation) {
       ctx.save(); ctx.globalAlpha = alpha; ctx.translate(x, y); ctx.rotate(rotation);
       ctx.fillStyle = color; ctx.beginPath();
@@ -283,15 +314,20 @@
       }
       ctx.fill(); ctx.restore();
     }
+
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles = particles.filter(p => p.alpha > 0.05);
       particles.forEach(p => {
-        p.x += p.dx; p.y += p.dy; p.alpha -= 0.012; p.rotation += 0.1;
+        p.x += p.dx;
+        p.y += p.dy;
+        p.alpha -= 0.012;
+        p.rotation += 0.1;
         drawStar(p.x, p.y, p.radius, p.color, p.alpha, p.rotation);
       });
       requestAnimationFrame(animateParticles);
     }
+
     animateParticles();
 
     function startMagic(event, destination) {
