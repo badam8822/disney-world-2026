@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,7 +147,7 @@
       <label><input type="radio" name="arrivaltime" value="morning" /> Before 11:00 AM</label>
       <label><input type="radio" name="arrivaltime" value="afternoon" /> 11:00 AM – 4:00 PM</label>
       <label><input type="radio" name="arrivaltime" value="evening" /> After 4:00 PM</label>
-      <button onclick="nextCard()">Next</button>
+      <button onclick="showPlan()">Build My Day</button>
     </div>
 
     <div class="card" data-card="2" data-parent="parkbreak">
@@ -154,7 +155,7 @@
       <label><input type="radio" name="breaktype" value="nap" /> Nap in room</label>
       <label><input type="radio" name="breaktype" value="pool" /> Swim at Doubloon Lagoon</label>
       <label><input type="radio" name="breaktype" value="boat" /> Boat to Disney Springs</label>
-      <button onclick="nextCard()">Next</button>
+      <button onclick="showPlan()">Build My Day</button>
     </div>
 
     <div class="card" data-card="2" data-parent="departure">
@@ -162,7 +163,7 @@
       <label><input type="radio" name="departurestyle" value="bigbreakfast" /> Big breakfast & walk</label>
       <label><input type="radio" name="departurestyle" value="quickpack" /> Pack fast & go</label>
       <label><input type="radio" name="departurestyle" value="lastwander" /> One last boat ride or walk</label>
-      <button onclick="nextCard()">Next</button>
+      <button onclick="showPlan()">Build My Day</button>
     </div>
   </div>
 
@@ -175,20 +176,15 @@
 
     function nextCard() {
       const cards = document.querySelectorAll('.card');
-      cards[currentCard - 1].classList.remove('active');
+      const firstCard = cards[0];
+      const selectedRadio = document.querySelector('input[name="daytype"]:checked');
+      if (!selectedRadio) return alert("Please select a day type.");
 
-      if (currentCard === 1) {
-        selectedDayType = document.querySelector('input[name="daytype"]:checked')?.value;
-        if (!selectedDayType) return alert("Please select a day type.");
-      }
+      selectedDayType = selectedRadio.value;
+      firstCard.classList.remove('active');
 
       const next = Array.from(cards).find(c => c.dataset.card === "2" && c.dataset.parent === selectedDayType);
-      if (next) {
-        next.classList.add('active');
-        currentCard++;
-      } else {
-        showPlan();
-      }
+      if (next) next.classList.add('active');
     }
 
     function showPlan() {
