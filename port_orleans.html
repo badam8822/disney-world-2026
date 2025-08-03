@@ -139,6 +139,7 @@
       <label><input type="radio" name="daytype" value="arrival" /> Arrival Day</label>
       <label><input type="radio" name="daytype" value="parkbreak" /> Midday Park Break</label>
       <label><input type="radio" name="daytype" value="departure" /> Departure Day</label>
+      <label><input type="radio" name="daytype" value="backfrompark" /> Back at Resort After Park</label>
       <button onclick="nextCard()">Next</button>
     </div>
 
@@ -164,7 +165,17 @@
       <label><input type="radio" name="departurestyle" value="quickpack" /> Pack fast & go</label>
       <label><input type="radio" name="departurestyle" value="lastwander" /> One last boat ride or walk</label>
       <button onclick="showPlan()">Build My Day</button>
+    
+    <div class="card" data-card="2" data-parent="backfrompark">
+      <h2>What are you in the mood for after your park day?</h2>
+      <label><input type="radio" name="parkreturn" value="relaxpool" /> Relax at the pool with a drink</label>
+      <label><input type="radio" name="parkreturn" value="movies" /> Watch the Movie Under the Stars</label>
+      <label><input type="radio" name="parkreturn" value="pizza" /> Order pizza to the room and chill</label>
+      <label><input type="radio" name="parkreturn" value="carriage" /> Horse-drawn carriage ride</label>
+      <label><input type="radio" name="parkreturn" value="springtrip" /> Boat to Disney Springs for dessert or live music</label>
+      <button onclick="showPlan()">Build My Day</button>
     </div>
+</div>
   </div>
 
   <div id="plan-output"></div>
@@ -217,7 +228,25 @@
         }
       }
 
-      if (daytype === "departure") {
+      if (daytype === "backfrompark") {
+      if (daytype === "backfrompark") {
+        const pstyle = document.querySelector('input[name="parkreturn"]:checked')?.value;
+        if (!pstyle) return alert("Please select an evening option.");
+        if (pstyle === "relaxpool") {
+          plan += "<li>Unwind at the Doubloon Lagoon pool with a frozen cocktail from Mardi Grogs.</li>";
+        } else if (pstyle === "movies") {
+          plan += "<li>Check the Recreation Board outside the lobby for tonight’s Movie Under the Stars — bring a blanket!</li>";
+        } else if (pstyle === "pizza") {
+          plan += "<li>Order pizza or pasta directly to your room using the Disney Resorts Room Service app — great for a quiet night in.</li>";
+        } else if (pstyle === "carriage") {
+          plan += "<li>Reserve a horse-drawn carriage ride through the Sassagoula River area (available most evenings, check with the front desk).</li>";
+        } else {
+          plan += "<li>Take the scenic boat ride to Disney Springs for late-night treats or to catch live music at the Waterside Stage.</li>";
+        }
+      }
+
+
+      } else if (daytype === "departure") {
         const dstyle = document.querySelector('input[name="departurestyle"]:checked')?.value;
         if (!dstyle) return alert("Please select a departure style.");
         if (dstyle === "bigbreakfast") {
