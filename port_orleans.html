@@ -181,6 +181,7 @@
   <div id="plan-output"></div>
   <button onclick="resetForm()">Start Over</button>
 
+  
   <script>
     let currentCard = 1;
     let selectedDayType = null;
@@ -214,9 +215,7 @@
         } else {
           plan += "<li>Relax with a walk through the courtyard. Then visit the bar for live jazz if available.</li>";
         }
-      }
-
-      if (daytype === "parkbreak") {
+      } else if (daytype === "parkbreak") {
         const btype = document.querySelector('input[name="breaktype"]:checked')?.value;
         if (!btype) return alert("Please select a break activity.");
         if (btype === "nap") {
@@ -226,10 +225,18 @@
         } else {
           plan += "<li>Catch the boat to Disney Springs. It's peaceful and takes ~15–20 mins.</li>";
         }
-      }
-
-      
-      if (daytype === "backfrompark") {
+      } else if (daytype === "departure") {
+        const dstyle = document.querySelector('input[name="departurestyle"]:checked')?.value;
+        if (!dstyle) return alert("Please select a departure style.");
+        if (dstyle === "bigbreakfast") {
+          plan += "<li>Enjoy a hearty breakfast from Sassagoula Floatworks (banana foster French toast!).</li>";
+          plan += "<li>Stroll the resort trail for final photos before checkout.</li>";
+        } else if (dstyle === "quickpack") {
+          plan += "<li>Pack early, grab beignets or bakery items to-go, and prepare for travel.</li>";
+        } else {
+          plan += "<li>Take one final boat ride before calling the bell service for luggage pickup.</li>";
+        }
+      } else if (daytype === "backfrompark") {
         const pstyle = document.querySelector('input[name="parkreturn"]:checked')?.value;
         if (!pstyle) return alert("Please select an evening option.");
         if (pstyle === "relaxpool") {
@@ -243,18 +250,6 @@
         } else {
           plan += "<li>Take the scenic boat ride to Disney Springs for late-night treats or to catch live music at the Waterside Stage.</li>";
         }
-      } else if (daytype === "departure") {
-
-        const dstyle = document.querySelector('input[name="departurestyle"]:checked')?.value;
-        if (!dstyle) return alert("Please select a departure style.");
-        if (dstyle === "bigbreakfast") {
-          plan += "<li>Enjoy a hearty breakfast from Sassagoula Floatworks (banana foster French toast!).</li>";
-          plan += "<li>Stroll the resort trail for final photos before checkout.</li>";
-        } else if (dstyle === "quickpack") {
-          plan += "<li>Pack early, grab beignets or bakery items to-go, and prepare for travel.</li>";
-        } else {
-          plan += "<li>Take one final boat ride before calling the bell service for luggage pickup.</li>";
-        }
       }
 
       plan += "</ul>";
@@ -266,5 +261,6 @@
       window.location.reload();
     }
   </script>
+
 </body>
 </html>
