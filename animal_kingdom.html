@@ -8,25 +8,24 @@
     body {
       margin: 0;
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(to bottom right, #ffffff, #f9f9f9);
+      background: url('mickey and minnie background.jpg') repeat;
+      background-size: 400px;
+      background-attachment: fixed;
       color: #000;
       text-align: center;
-      transition: opacity 1s ease;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: -1;
     }
 
     body.fade-out {
       opacity: 0;
-    }
-
-    .banner {
-      background-color: #e62429;
-      padding: 20px;
-      font-size: 2.5rem;
-      font-weight: bold;
-      border-top: 5px solid #000;
-      border-bottom: 5px solid #000;
-      color: #ffcc00;
-      letter-spacing: 2px;
     }
 
     .logo {
@@ -71,7 +70,7 @@
 <body>
   <canvas id="fairy-dust"></canvas>
 
-  <img class="logo" src="Animal Kingdom.png" alt="Animal Kingdom" />
+  <img class="logo" src="Animal Kingdom.png" alt="Animal Kingdom Header" />
 
   <div class="button-container">
     <img src="Disneyworld Home logo.png" alt="Home" class="park-logo" onclick="startMagic(event, 'index.html')" />
@@ -79,10 +78,7 @@
     <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" onclick="startMagic(event, 'magic_kingdom.html')" />
     <img src="Epcot.png" alt="EPCOT" class="park-logo" onclick="startMagic(event, 'epcot.html')" />
     <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" onclick="startMagic(event, 'hollywood_studios.html')" />
-    <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" onclick="startMagic(event, 'animal_kingdom.html')" />
   </div>
-
-  <div class="banner">Animal Kingdom</div>
 
   <script>
     const canvas = document.getElementById('fairy-dust');
@@ -156,6 +152,7 @@
       const rect = event.target.getBoundingClientRect();
       const clickX = rect.left + rect.width / 2;
       const clickY = rect.top + rect.height / 2;
+
       sprinkle(clickX, clickY, 200);
       document.body.classList.add('fade-out');
       setTimeout(() => {
