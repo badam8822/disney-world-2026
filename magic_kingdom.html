@@ -132,31 +132,31 @@
       const card2 = document.getElementById('card2');
       let html = '';
 
-      if (type === 'ropeDrop') {
-        html = `
-          <label><strong>Start your day with a character breakfast?</strong></label><br>
-          <select id="breakfast">
-            <option value="">-- Choose --</option>
-            <option value="crystal">Crystal Palace with Pooh & Friends</option>
-            <option value="quick">Quick bite before the rides</option>
-          </select>`;
-      } else if (type === 'relaxed' || type === 'afterNap') {
-        html = `
-          <label><strong>What sounds like a good start?</strong></label><br>
-          <select id="startRelaxed">
-            <option value="">-- Choose --</option>
-            <option value="gentle">Gentle ride (small world, PeopleMover)</option>
-            <option value="snack">Snack and show</option>
-          </select>`;
-      } else if (type === 'departure') {
-        html = `
-          <label><strong>One last hurrah?</strong></label><br>
-          <select id="departurePlan">
-            <option value="">-- Choose --</option>
-            <option value="rides">Peter Pan + Jungle Cruise</option>
-            <option value="chill">Wander, shop, take photos</option>
-          </select>`;
-      }
+    if (type === 'ropeDrop') {
+  html = `
+    <label><strong>Start your day with a character breakfast?</strong></label><br>
+    <select id="breakfast" onchange="showCard4()">
+      <option value="">-- Choose --</option>
+      <option value="crystal">Crystal Palace with Pooh & Friends</option>
+      <option value="quick">Quick bite before the rides</option>
+    </select>`;
+} else if (type === 'relaxed' || type === 'afterNap') {
+  html = `
+    <label><strong>What sounds like a good start?</strong></label><br>
+    <select id="startRelaxed" onchange="showCard4()">
+      <option value="">-- Choose --</option>
+      <option value="gentle">Gentle ride (small world, PeopleMover)</option>
+      <option value="snack">Snack and show</option>
+    </select>`;
+} else if (type === 'departure') {
+  html = `
+    <label><strong>One last hurrah?</strong></label><br>
+    <select id="departurePlan" onchange="showCard4()">
+      <option value="">-- Choose --</option>
+      <option value="rides">Peter Pan + Jungle Cruise</option>
+      <option value="chill">Wander, shop, take photos</option>
+    </select>`;
+}
 
       card2.innerHTML = html;
       card2.classList.remove("hidden");
