@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      padding-top: 0;
+      padding: 0;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       background: url('mickey and minnie background.jpg') repeat;
       background-size: 400px;
@@ -111,14 +110,10 @@
   </div>
 
   <div id="card2" class="card hidden"></div>
-  <div id="card3" class="card hidden">
-    <label><strong>Would you like to use Genie+ Lightning Lanes?</strong></label>
-    <select>
-      <option value="">-- Choose an option --</option>
-      <option>Yes, we’ll grab a couple must-do rides</option>
-      <option>No thanks, we’re going with the flow</option>
-    </select>
-  </div>
+  <div id="card3" class="card hidden"></div>
+  <div id="card4" class="card hidden"></div>
+  <div id="card5" class="card hidden"></div>
+
   <div id="buildButton" class="card hidden" style="text-align:center;">
     <button onclick="generateMKDay()">✨ Build My Day ✨</button>
   </div>
@@ -129,36 +124,122 @@
       const type = document.getElementById('dayType').value;
       const card2 = document.getElementById('card2');
       let html = '';
+
       if (type === 'ropeDrop') {
-        html = '<label><strong>Start with breakfast or adventure?</strong></label><select><option>Crystal Palace character breakfast</option><option>Quick bite and head to rides</option></select>';
+        html = `
+          <label><strong>Start your day with a character breakfast?</strong></label><br>
+          <select id="breakfast">
+            <option value="">-- Choose --</option>
+            <option value="crystal">Crystal Palace with Pooh & Friends</option>
+            <option value="quick">Quick bite before the rides</option>
+          </select>`;
       } else if (type === 'relaxed' || type === 'afterNap') {
-        html = '<label><strong>What sounds like a good start?</strong></label><select><option>Gentle ride (small world, PeopleMover)</option><option>Snack and show</option></select>';
+        html = `
+          <label><strong>What sounds like a good start?</strong></label><br>
+          <select id="startRelaxed">
+            <option value="">-- Choose --</option>
+            <option value="gentle">Gentle ride (small world, PeopleMover)</option>
+            <option value="snack">Snack and show</option>
+          </select>`;
       } else if (type === 'departure') {
-        html = '<label><strong>One last hurrah?</strong></label><select><option>Peter Pan + Jungle Cruise</option><option>Wander, shop, and take photos</option></select>';
+        html = `
+          <label><strong>One last hurrah?</strong></label><br>
+          <select id="departurePlan">
+            <option value="">-- Choose --</option>
+            <option value="rides">Peter Pan + Jungle Cruise</option>
+            <option value="chill">Wander, shop, take photos</option>
+          </select>`;
       }
+
       card2.innerHTML = html;
-      card2.classList.remove('hidden');
-      document.getElementById('card3').classList.remove('hidden');
-      document.getElementById('buildButton').classList.remove('hidden');
+      card2.classList.remove("hidden");
+
+      document.getElementById("card3").innerHTML = `
+        <label><strong>Will you use Genie+ Lightning Lanes?</strong></label><br>
+        <select id="genie" onchange="showCard4()">
+          <option value="">-- Choose --</option>
+          <option value="yes">Yes – Let’s skip some lines!</option>
+          <option value="no">No – Going with the flow</option>
+        </select>`;
+      document.getElementById("card3").classList.remove("hidden");
+    }
+
+    function showCard4() {
+      const genie = document.getElementById('genie').value;
+      const card4 = document.getElementById('card4');
+      let html = '';
+
+      if (genie === 'yes') {
+        html = `
+          <label><strong>Pick 2 Genie+ rides:</strong></label><br>
+          <select id="ride1">
+            <option value="">-- First Choice --</option>
+            <option>Peter Pan's Flight</option>
+            <option>Big Thunder Mountain</option>
+            <option>Haunted Mansion</option>
+            <option>Jungle Cruise</option>
+          </select><br><br>
+          <select id="ride2">
+            <option value="">-- Second Choice --</option>
+            <option>Buzz Lightyear</option>
+            <option>Under the Sea</option>
+            <option>Pirates of the Caribbean</option>
+            <option>Small World</option>
+          </select>`;
+      } else {
+        html = `<p><em>No Genie+? Let’s embrace the spontaneity!</em></p>`;
+      }
+
+      card4.innerHTML = html;
+      card4.classList.remove("hidden");
+
+      document.getElementById("card5").innerHTML = `
+        <label><strong>How do you want to end your day?</strong></label><br>
+        <select id="eveningPlan">
+          <option value="">-- Choose --</option>
+          <option value="castle">Dinner at Cinderella’s Royal Table</option>
+          <option value="parade">Quick bite + parade</option>
+          <option value="carousel">Carousel + boat to resort</option>
+          <option value="souvenirs">Souvenirs then exit before fireworks</option>
+        </select>`;
+      document.getElementById("card5").classList.remove("hidden");
+      document.getElementById("buildButton").classList.remove("hidden");
     }
 
     function generateMKDay() {
       const type = document.getElementById('dayType').value;
-      let message = '<h2>Your Magic Day ✨</h2><ul>';
+      const genie = document.getElementById('genie')?.value;
+      const evening = document.getElementById('eveningPlan')?.value;
+      const ride1 = document.getElementById('ride1')?.value;
+      const ride2 = document.getElementById('ride2')?.value;
+
+      let summary = `<h2>🎉 Your Magic Kingdom Day</h2><ul>`;
+
       if (type === 'ropeDrop') {
-        message += '<li>🌅 You’ll be there early! Fuel up at Crystal Palace or dash to Fantasyland before the crowds!</li>';
-      } else if (type === 'relaxed') {
-        message += '<li>🌤️ A slow start is a magical one — maybe a snack and castle selfie to begin?</li>';
-      } else if (type === 'afterNap') {
-        message += '<li>🕓 Refreshed and ready to go! Choose something fun like the PeopleMover or Buzz!</li>';
+        const breakfast = document.getElementById('breakfast')?.value;
+        summary += `<li>🌅 Start with: ${breakfast === 'crystal' ? 'Crystal Palace breakfast' : 'a quick bite on Main Street'}</li>`;
+      } else if (type === 'relaxed' || type === 'afterNap') {
+        const start = document.getElementById('startRelaxed')?.value;
+        summary += `<li>🧸 First up: ${start}</li>`;
       } else if (type === 'departure') {
-        message += '<li>🚪 One last memory before you go — let’s ride Peter Pan or cruise through Adventureland.</li>';
-      } else {
-        message += '<li>Choose a day style above to get started!</li>';
+        const departure = document.getElementById('departurePlan')?.value;
+        summary += `<li>🚪 Departure magic: ${departure}</li>`;
       }
-      message += '</ul>';
-      document.getElementById('recommendations').innerHTML = message;
-      document.getElementById('recommendations').classList.remove('hidden');
+
+      if (genie === 'yes') {
+        summary += `<li>⚡ Genie+ Rides: ${ride1} and ${ride2}</li>`;
+      } else {
+        summary += `<li>🌀 No Genie+ – you're free-spiriting it today!</li>`;
+      }
+
+      if (evening === 'castle') summary += `<li>🏰 End with dinner inside Cinderella’s Castle!</li>`;
+      if (evening === 'parade') summary += `<li>🎆 Parade and a snack = perfect wrap-up!</li>`;
+      if (evening === 'carousel') summary += `<li>🎠 Carousel ride then boat back to your resort</li>`;
+      if (evening === 'souvenirs') summary += `<li>🛍️ End with shopping and skip the fireworks rush</li>`;
+
+      summary += `</ul>`;
+      document.getElementById("recommendations").innerHTML = summary;
+      document.getElementById("recommendations").classList.remove("hidden");
     }
 
     const canvas = document.getElementById('fairy-dust');
@@ -205,6 +286,7 @@
       requestAnimationFrame(animateParticles);
     }
     animateParticles();
+
     function startMagic(event, destination) {
       const rect = event.target.getBoundingClientRect();
       const clickX = rect.left + rect.width / 2;
