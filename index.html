@@ -6,13 +6,23 @@
   <title>Disney World 2026</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(to bottom right, #ffffff, #f9f9f9);
-      color: #000;
-      text-align: center;
-      transition: opacity 1s ease;
-    }
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: url('mickey and minnie background.jpg') repeat;
+  background-size: 400px;
+  background-attachment: fixed;
+  color: #000;
+  text-align: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8); /* white overlay with 80% opacity */
+  z-index: -1;
+}
 
     body.fade-out {
       opacity: 0;
