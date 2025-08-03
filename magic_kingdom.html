@@ -1,76 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magic Kingdom Day Planner</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic Kingdom Planner</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8f0;
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: url('mickey and minnie background.jpg') repeat;
+      background-size: 400px;
+      background-attachment: fixed;
+      color: #000;
+      text-align: center;
+      position: relative;
     }
-    .nav-buttons {
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: -1;
+    }
+
+    .logo {
+      max-width: 58.5%;
+      height: auto;
+      margin: 30px auto 10px;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .button-container {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
     }
-    .nav-buttons a {
-      background-color: #ffb347;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+
+    .park-logo {
+      width: 162.5px;
+      height: auto;
+      border-radius: 15px;
+      background-color: transparent;
+      transition: transform 0.2s ease;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
     }
+
+    .park-logo:hover {
+      transform: scale(1.05);
+    }
+
     .card {
       background-color: white;
       border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: left;
     }
-    .hidden {
-      display: none;
-    }
+
     select, button {
       padding: 10px;
       margin-top: 10px;
       font-size: 1rem;
+      width: 100%;
     }
+
+    .hidden {
+      display: none;
+    }
+
     #recommendations {
       background-color: #fff3cd;
       border-left: 6px solid #ffa500;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      width: 90%;
+      max-width: 700px;
+      text-align: left;
     }
+
     h1 {
-      text-align: center;
+      font-size: 2.5rem;
       color: #da1884;
-    }
-    h2 {
-      color: #ff6f00;
-    }
-    ul {
-      padding-left: 20px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="nav-buttons">
-    <a href="index.html">🏠 Home</a>
-    <a href="full_itinerary.html">📅 Full Itinerary</a>
-    <a href="port_orleans.html">🌸 Port Orleans</a>
-    <a href="magic_kingdom.html">🏰 Magic Kingdom</a>
-    <a href="epcot.html">🌐 EPCOT</a>
-    <a href="hollywood_studios.html">🎬 Studios</a>
-    <a href="animal_kingdom.html">🦁 Animal Kingdom</a>
+  <canvas id="fairy-dust"></canvas>
+  <img class="logo" src="Magic Kingdom.png" alt="Magic Kingdom" />
+
+  <div class="button-container">
+    <img src="French Quarter.png" alt="Port Orleans" class="park-logo" onclick="startMagic(event, 'port_orleans.html')" />
+    <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" onclick="startMagic(event, 'magic_kingdom.html')" />
+    <img src="Epcot.png" alt="EPCOT" class="park-logo" onclick="startMagic(event, 'epcot.html')" />
+    <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" onclick="startMagic(event, 'hollywood_studios.html')" />
+    <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" onclick="startMagic(event, 'animal_kingdom.html')" />
   </div>
 
   <h1>✨ Plan Your Magic Kingdom Day ✨</h1>
@@ -90,156 +124,81 @@
   <div id="card3" class="card hidden"></div>
   <div id="card4" class="card hidden"></div>
   <div id="card5" class="card hidden"></div>
-
-  <div id="buildButton" class="hidden">
+  <div id="buildButton" class="hidden card" style="text-align:center;">
     <button onclick="generateMKDay()">✨ Build My Day ✨</button>
   </div>
 
   <div id="recommendations" class="hidden"></div>
 
   <script>
-    function nextFlashcard(cardId) {
-      const selection = document.getElementById(cardId).value;
-      const card2 = document.getElementById('card2');
-      card2.classList.remove('hidden');
-
-      if (cardId === 'dayType') {
-        let html = '';
-        if (selection === 'ropeDrop') {
-          html = `
-            <label><strong>Start your day with a character breakfast?</strong></label><br>
-            <select id="breakfast">
-              <option value="">-- Choose --</option>
-              <option value="crystal">Yes – Crystal Palace with Pooh & Friends</option>
-              <option value="quick">No – Quick breakfast on Main Street</option>
-            </select>`;
-        } else if (selection === 'relaxed' || selection === 'afterNap') {
-          html = `
-            <label><strong>Start with a ride, show, or snack?</strong></label><br>
-            <select id="firstActivity">
-              <option value="">-- Choose --</option>
-              <option value="gentle">Ride something gentle (small world, PeopleMover)</option>
-              <option value="thrill">Thrill ride with Rider Switch</option>
-              <option value="snack">Grab a snack and watch a show</option>
-            </select>`;
-        } else if (selection === 'departure') {
-          html = `
-            <label><strong>What’s your vibe before leaving?</strong></label><br>
-            <select id="departurePlan">
-              <option value="">-- Choose --</option>
-              <option value="rides">Ride Peter Pan and Jungle Cruise</option>
-              <option value="chill">Take photos, ride the train, shop</option>
-            </select>`;
-        }
-        card2.innerHTML = html;
-        setTimeout(() => document.getElementById('card3').classList.remove('hidden'), 300);
+    const canvas = document.getElementById('fairy-dust');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    function createParticle(x, y) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 6 + 2;
+      return {
+        x,
+        y,
+        radius: Math.random() * 6 + 4,
+        alpha: 1,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        rotation: Math.random() * 2 * Math.PI,
+        color: ['#ff69b4', '#dda0dd', '#ffcc00'][Math.floor(Math.random() * 3)]
+      };
+    }
+    function sprinkle(x, y, count = 200) {
+      for (let i = 0; i < count; i++) {
+        particles.push(createParticle(x, y));
       }
     }
-
-    document.getElementById('card3').innerHTML = `
-      <label><strong>Will you use Genie+ Lightning Lanes?</strong></label><br>
-      <select id="genie" onchange="showGenieChoices()">
-        <option value="">-- Choose --</option>
-        <option value="yes">Yes – Buy Genie+ for MK</option>
-        <option value="no">Nope, go with the flow</option>
-      </select>`;
-
-    function showGenieChoices() {
-      const genieValue = document.getElementById('genie').value;
-      const card4 = document.getElementById('card4');
-      card4.classList.remove('hidden');
-      if (genieValue === 'yes') {
-        card4.innerHTML = `
-          <label><strong>Pick 2 top Genie+ rides:</strong></label><br>
-          <select id="ride1">
-            <option value="">-- First Choice --</option>
-            <option value="jungle">Jungle Cruise</option>
-            <option value="peterpan">Peter Pan's Flight</option>
-            <option value="btm">Big Thunder Mountain</option>
-            <option value="haunted">Haunted Mansion</option>
-            <option value="pirates">Pirates of the Caribbean</option>
-            <option value="buzz">Buzz Lightyear</option>
-            <option value="mermaid">Under the Sea</option>
-          </select><br><br>
-          <select id="ride2">
-            <option value="">-- Second Choice --</option>
-            <option value="jungle">Jungle Cruise</option>
-            <option value="peterpan">Peter Pan's Flight</option>
-            <option value="btm">Big Thunder Mountain</option>
-            <option value="haunted">Haunted Mansion</option>
-            <option value="pirates">Pirates of the Caribbean</option>
-            <option value="buzz">Buzz Lightyear</option>
-            <option value="mermaid">Under the Sea</option>
-          </select>`;
-      } else {
-        card4.innerHTML = `<p><em>No Lightning Lanes? Bold choice!</em></p>`;
+    function drawStar(x, y, radius, color, alpha, rotation) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        ctx.lineTo(0, radius);
+        ctx.translate(0, radius);
+        ctx.rotate((Math.PI * 2) / 10);
+        ctx.lineTo(0, -radius);
+        ctx.translate(0, -radius);
+        ctx.rotate(-((Math.PI * 6) / 10));
       }
-      setTimeout(() => document.getElementById('card5').classList.remove('hidden'), 300);
+      ctx.fill();
+      ctx.restore();
     }
-
-    document.getElementById('card5').innerHTML = `
-      <label><strong>Will you take a midday break?</strong></label><br>
-      <select id="break">
-        <option value="">-- Choose --</option>
-        <option value="yes">Yes – Back to resort around 1 PM</option>
-        <option value="no">No – Power through!</option>
-        <option value="maybe">Maybe – See how we feel</option>
-      </select><br><br>
-      <label><strong>How do you want to end your day?</strong></label><br>
-      <select id="evening">
-        <option value="">-- Choose --</option>
-        <option value="castle">Dinner at Cinderella’s Royal Table</option>
-        <option value="quick">Quick bite + parade (no fireworks)</option>
-        <option value="carousel">Ride carousel, boat back to resort</option>
-        <option value="souvenirs">Shop + exit before fireworks</option>
-      </select>`;
-
-    setTimeout(() => document.getElementById('buildButton').classList.remove('hidden'), 600);
-
-    function generateMKDay() {
-      const dayType = document.getElementById('dayType').value;
-      const genie = document.getElementById('genie').value;
-      const breakPlan = document.getElementById('break').value;
-      const evening = document.getElementById('evening').value;
-      const ride1 = document.getElementById('ride1')?.value;
-      const ride2 = document.getElementById('ride2')?.value;
-
-      let summary = "<h2>🎉 Your Magical Kingdom Adventure Awaits!</h2><ul>";
-
-      if (dayType === 'ropeDrop') {
-        const breakfast = document.getElementById('breakfast').value;
-        summary += `<li>✨ Rise and shine! Start your morning ${breakfast === 'crystal' ? 'with a delightful character breakfast at Crystal Palace alongside Pooh & Friends' : 'with a quick bite as you stroll down Main Street, USA'}</li>`;
-      } else if (dayType === 'relaxed' || dayType === 'afterNap') {
-        const first = document.getElementById('firstActivity').value;
-        summary += `<li>🧭 Ease into the magic with ${first} — a perfect start for your party!</li>`;
-      } else if (dayType === 'departure') {
-        const dep = document.getElementById('departurePlan').value;
-        summary += `<li>🕒 Before saying goodbye, soak up some final memories with ${dep}.</li>`;
-      }
-
-      if (genie === 'yes') {
-        summary += `<li>⚡ Your Lightning Lane picks? ${ride1} and ${ride2}! Get ready to skip the lines like a VIP.</li>`;
-      } else {
-        summary += `<li>🎭 No Lightning Lanes today — you’re embracing spontaneity and magic in the moment!</li>`;
-      }
-
-      summary += `<li>🌤️ Midday plan: ${breakPlan === 'yes' ? 'Recharge at the resort with a nap or pool time' : breakPlan === 'maybe' ? 'Play it by ear — flexibility is key!' : 'Keep the adventure going strong all day long!'}</li>`;
-
-      let eveningText = '';
-      switch (evening) {
-        case 'castle':
-          eveningText = "✨ Dine like royalty inside Cinderella’s Castle — a fairytale ending."; break;
-        case 'quick':
-          eveningText = "🍟 Grab something tasty, find a cozy spot for the parade, and skip the fireworks."; break;
-        case 'carousel':
-          eveningText = "🎠 End with a classic carousel ride and a peaceful boat ride back to the resort."; break;
-        case 'souvenirs':
-          eveningText = "🛍️ Scoop up souvenirs and beat the crowds out of the park — perfect timing!"; break;
-      }
-      summary += `<li>${eveningText}</li></ul>`;
-
-      document.getElementById('recommendations').innerHTML = summary;
-      document.getElementById('recommendations').classList.remove('hidden');
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.alpha > 0.05);
+      particles.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+        p.alpha -= 0.012;
+        p.rotation += 0.1;
+        drawStar(p.x, p.y, p.radius, p.color, p.alpha, p.rotation);
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+    function startMagic(event, destination) {
+      const rect = event.target.getBoundingClientRect();
+      const clickX = rect.left + rect.width / 2;
+      const clickY = rect.top + rect.height / 2;
+      sprinkle(clickX, clickY, 200);
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = destination;
+      }, 1200);
     }
   </script>
 </body>
