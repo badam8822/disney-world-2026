@@ -7,16 +7,32 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      background-color: #fff8f0;
       padding: 20px;
-      max-width: 700px;
+      max-width: 800px;
       margin: auto;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .nav-buttons a {
+      background-color: #ffb347;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     }
     .card {
       background-color: white;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
     .hidden {
@@ -28,13 +44,35 @@
       font-size: 1rem;
     }
     #recommendations {
-      background-color: #e3f2fd;
-      border-left: 6px solid #42a5f5;
-      padding: 15px;
+      background-color: #fff3cd;
+      border-left: 6px solid #ffa500;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #da1884;
+    }
+    h2 {
+      color: #ff6f00;
+    }
+    ul {
+      padding-left: 20px;
     }
   </style>
 </head>
 <body>
+  <div class="nav-buttons">
+    <a href="index.html">🏠 Home</a>
+    <a href="full_itinerary.html">📅 Full Itinerary</a>
+    <a href="port_orleans.html">🌸 Port Orleans</a>
+    <a href="magic_kingdom.html">🏰 Magic Kingdom</a>
+    <a href="epcot.html">🌐 EPCOT</a>
+    <a href="hollywood_studios.html">🎬 Studios</a>
+    <a href="animal_kingdom.html">🦁 Animal Kingdom</a>
+  </div>
+
   <h1>✨ Plan Your Magic Kingdom Day ✨</h1>
 
   <div id="card1" class="card">
@@ -54,7 +92,7 @@
   <div id="card5" class="card hidden"></div>
 
   <div id="buildButton" class="hidden">
-    <button onclick="generateMKDay()">Build My Day</button>
+    <button onclick="generateMKDay()">✨ Build My Day ✨</button>
   </div>
 
   <div id="recommendations" class="hidden"></div>
@@ -73,7 +111,7 @@
             <select id="breakfast">
               <option value="">-- Choose --</option>
               <option value="crystal">Yes – Crystal Palace with Pooh & Friends</option>
-              <option value="quick">No – Quick breakfast before entering</option>
+              <option value="quick">No – Quick breakfast on Main Street</option>
             </select>`;
         } else if (selection === 'relaxed' || selection === 'afterNap') {
           html = `
@@ -134,7 +172,7 @@
             <option value="mermaid">Under the Sea</option>
           </select>`;
       } else {
-        card4.innerHTML = `<p><em>No Lightning Lanes? Bold choice.</em></p>`;
+        card4.innerHTML = `<p><em>No Lightning Lanes? Bold choice!</em></p>`;
       }
       setTimeout(() => document.getElementById('card5').classList.remove('hidden'), 300);
     }
@@ -166,32 +204,42 @@
       const ride1 = document.getElementById('ride1')?.value;
       const ride2 = document.getElementById('ride2')?.value;
 
-      let output = `<h2>🎉 Your Magic Kingdom Day Plan</h2><ul>`;
+      let summary = "<h2>🎉 Your Magical Kingdom Adventure Awaits!</h2><ul>";
 
       if (dayType === 'ropeDrop') {
         const breakfast = document.getElementById('breakfast').value;
-        output += `<li>Start with: ${breakfast === 'crystal' ? 'Crystal Palace breakfast with characters' : 'Quick breakfast on Main Street'}</li>`;
+        summary += `<li>✨ Rise and shine! Start your morning ${breakfast === 'crystal' ? 'with a delightful character breakfast at Crystal Palace alongside Pooh & Friends' : 'with a quick bite as you stroll down Main Street, USA'}</li>`;
       } else if (dayType === 'relaxed' || dayType === 'afterNap') {
         const first = document.getElementById('firstActivity').value;
-        output += `<li>Begin with: ${first}</li>`;
+        summary += `<li>🧭 Ease into the magic with ${first} — a perfect start for your party!</li>`;
       } else if (dayType === 'departure') {
         const dep = document.getElementById('departurePlan').value;
-        output += `<li>Departure fun: ${dep}</li>`;
+        summary += `<li>🕒 Before saying goodbye, soak up some final memories with ${dep}.</li>`;
       }
 
       if (genie === 'yes') {
-        output += `<li>Genie+ Rides: ${ride1}, ${ride2}</li>`;
+        summary += `<li>⚡ Your Lightning Lane picks? ${ride1} and ${ride2}! Get ready to skip the lines like a VIP.</li>`;
       } else {
-        output += `<li>No Genie+ today</li>`;
+        summary += `<li>🎭 No Lightning Lanes today — you’re embracing spontaneity and magic in the moment!</li>`;
       }
 
-      output += `<li>Midday: ${breakPlan}</li>`;
-      output += `<li>Evening plan: ${evening}</li>`;
-      output += `</ul>`;
+      summary += `<li>🌤️ Midday plan: ${breakPlan === 'yes' ? 'Recharge at the resort with a nap or pool time' : breakPlan === 'maybe' ? 'Play it by ear — flexibility is key!' : 'Keep the adventure going strong all day long!'}</li>`;
 
-      const resultBox = document.getElementById('recommendations');
-      resultBox.innerHTML = output;
-      resultBox.classList.remove('hidden');
+      let eveningText = '';
+      switch (evening) {
+        case 'castle':
+          eveningText = "✨ Dine like royalty inside Cinderella’s Castle — a fairytale ending."; break;
+        case 'quick':
+          eveningText = "🍟 Grab something tasty, find a cozy spot for the parade, and skip the fireworks."; break;
+        case 'carousel':
+          eveningText = "🎠 End with a classic carousel ride and a peaceful boat ride back to the resort."; break;
+        case 'souvenirs':
+          eveningText = "🛍️ Scoop up souvenirs and beat the crowds out of the park — perfect timing!"; break;
+      }
+      summary += `<li>${eveningText}</li></ul>`;
+
+      document.getElementById('recommendations').innerHTML = summary;
+      document.getElementById('recommendations').classList.remove('hidden');
     }
   </script>
 </body>
