@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plan Your Port Orleans Day</title>
   <style>
@@ -16,7 +16,6 @@
       text-align: center;
       position: relative;
     }
-
     body::before {
       content: "";
       position: fixed;
@@ -24,7 +23,6 @@
       background: rgba(255, 255, 255, 0.8);
       z-index: -1;
     }
-
     .logo {
       max-width: 58.5%;
       height: auto;
@@ -32,7 +30,6 @@
       border-radius: 25px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
-
     .button-container {
       display: flex;
       flex-wrap: wrap;
@@ -40,7 +37,6 @@
       gap: 20px;
       margin: 30px 0;
     }
-
     .park-logo {
       width: 162.5px;
       height: auto;
@@ -50,11 +46,9 @@
       box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
       cursor: pointer;
     }
-
     .park-logo:hover {
       transform: scale(1.05);
     }
-
     .card {
       background: #fff;
       padding: 20px;
@@ -66,23 +60,19 @@
       display: none;
       text-align: left;
     }
-
     .card.active {
       display: block;
     }
-
     .card h2 {
       font-size: 1.4rem;
       margin-bottom: 10px;
       color: #333;
     }
-
     .card label {
       display: block;
       margin: 8px 0;
       cursor: pointer;
     }
-
     button {
       background-color: #e62429;
       color: white;
@@ -94,11 +84,9 @@
       cursor: pointer;
       box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
     }
-
     button:hover {
       background-color: #b91c21;
     }
-
     #plan-output {
       background-color: #fffbea;
       border-radius: 15px;
@@ -114,23 +102,12 @@
 <body>
 
   <img class="logo" src="French Quarter.png" alt="Port Orleans French Quarter Header" />
-
   <div class="button-container">
-    <a href="index.html">
-      <img src="Disneyworld Home logo.png" alt="Home" class="park-logo" />
-    </a>
-    <a href="magic_kingdom.html">
-      <img src="Magic Kingdom.png" alt="Magic Kingdom" class="park-logo" />
-    </a>
-    <a href="epcot.html">
-      <img src="Epcot.png" alt="EPCOT" class="park-logo" />
-    </a>
-    <a href="hollywood_studios.html">
-      <img src="Hollywood studios.png" alt="Hollywood Studios" class="park-logo" />
-    </a>
-    <a href="animal_kingdom.html">
-      <img src="Animal Kingdom.png" alt="Animal Kingdom" class="park-logo" />
-    </a>
+    <a href="index.html"><img src="Disneyworld Home logo.png" class="park-logo" /></a>
+    <a href="magic_kingdom.html"><img src="Magic Kingdom.png" class="park-logo" /></a>
+    <a href="epcot.html"><img src="Epcot.png" class="park-logo" /></a>
+    <a href="hollywood_studios.html"><img src="Hollywood studios.png" class="park-logo" /></a>
+    <a href="animal_kingdom.html"><img src="Animal Kingdom.png" class="park-logo" /></a>
   </div>
 
   <div id="cards-container">
@@ -165,7 +142,8 @@
       <label><input type="radio" name="departurestyle" value="quickpack" /> Pack fast & go</label>
       <label><input type="radio" name="departurestyle" value="lastwander" /> One last boat ride or walk</label>
       <button onclick="showPlan()">Build My Day</button>
-    
+    </div>
+
     <div class="card" data-card="2" data-parent="backfrompark">
       <h2>What are you in the mood for after your park day?</h2>
       <label><input type="radio" name="parkreturn" value="relaxpool" /> Relax at the pool with a drink</label>
@@ -175,35 +153,25 @@
       <label><input type="radio" name="parkreturn" value="springtrip" /> Boat to Disney Springs for dessert or live music</label>
       <button onclick="showPlan()">Build My Day</button>
     </div>
-</div>
   </div>
 
   <div id="plan-output"></div>
-  <button onclick="resetForm()">Start Over</button>
+  <button onclick="location.reload()">Start Over</button>
 
-  
   <script>
-    let currentCard = 1;
     let selectedDayType = null;
 
     function nextCard() {
-      const cards = document.querySelectorAll('.card');
-      const firstCard = cards[0];
-      const selectedRadio = document.querySelector('input[name="daytype"]:checked');
-      if (!selectedRadio) return alert("Please select a day type.");
-
-      selectedDayType = selectedRadio.value;
-      firstCard.classList.remove('active');
-
-      const next = Array.from(cards).find(c => c.dataset.card === "2" && c.dataset.parent === selectedDayType);
-      if (next) next.classList.add('active');
+      const selected = document.querySelector('input[name="daytype"]:checked');
+      if (!selected) return alert("Please select a day type.");
+      selectedDayType = selected.value;
+      document.querySelector('[data-card="1"]').classList.remove('active');
+      document.querySelector(`[data-card="2"][data-parent="${selectedDayType}"]`).classList.add('active');
     }
 
     function showPlan() {
-      const daytype = selectedDayType;
       let plan = "<h2>Your Custom Port Orleans Plan</h2><ul>";
-
-      if (daytype === "arrival") {
+      if (selectedDayType === "arrival") {
         const time = document.querySelector('input[name="arrivaltime"]:checked')?.value;
         if (!time) return alert("Please select an arrival time.");
         if (time === "morning") {
@@ -215,52 +183,46 @@
         } else {
           plan += "<li>Relax with a walk through the courtyard. Then visit the bar for live jazz if available.</li>";
         }
-      } else if (daytype === "parkbreak") {
-        const btype = document.querySelector('input[name="breaktype"]:checked')?.value;
-        if (!btype) return alert("Please select a break activity.");
-        if (btype === "nap") {
+      } else if (selectedDayType === "parkbreak") {
+        const choice = document.querySelector('input[name="breaktype"]:checked')?.value;
+        if (!choice) return alert("Please select a break activity.");
+        if (choice === "nap") {
           plan += "<li>Return to the room by 1:30 PM. Turn on cartoons and recharge for the evening.</li>";
-        } else if (btype === "pool") {
+        } else if (choice === "pool") {
           plan += "<li>Visit the Doubloon Lagoon pool. Bring a refillable mug and enjoy frozen lemonade.</li>";
         } else {
           plan += "<li>Catch the boat to Disney Springs. It's peaceful and takes ~15–20 mins.</li>";
         }
-      } else if (daytype === "departure") {
-        const dstyle = document.querySelector('input[name="departurestyle"]:checked')?.value;
-        if (!dstyle) return alert("Please select a departure style.");
-        if (dstyle === "bigbreakfast") {
+      } else if (selectedDayType === "departure") {
+        const style = document.querySelector('input[name="departurestyle"]:checked')?.value;
+        if (!style) return alert("Please select a departure style.");
+        if (style === "bigbreakfast") {
           plan += "<li>Enjoy a hearty breakfast from Sassagoula Floatworks (banana foster French toast!).</li>";
           plan += "<li>Stroll the resort trail for final photos before checkout.</li>";
-        } else if (dstyle === "quickpack") {
+        } else if (style === "quickpack") {
           plan += "<li>Pack early, grab beignets or bakery items to-go, and prepare for travel.</li>";
         } else {
           plan += "<li>Take one final boat ride before calling the bell service for luggage pickup.</li>";
         }
-      } else if (daytype === "backfrompark") {
-        const pstyle = document.querySelector('input[name="parkreturn"]:checked')?.value;
-        if (!pstyle) return alert("Please select an evening option.");
-        if (pstyle === "relaxpool") {
+      } else if (selectedDayType === "backfrompark") {
+        const mood = document.querySelector('input[name="parkreturn"]:checked')?.value;
+        if (!mood) return alert("Please select an evening option.");
+        if (mood === "relaxpool") {
           plan += "<li>Unwind at the Doubloon Lagoon pool with a frozen cocktail from Mardi Grogs.</li>";
-        } else if (pstyle === "movies") {
+        } else if (mood === "movies") {
           plan += "<li>Check the Recreation Board outside the lobby for tonight’s Movie Under the Stars — bring a blanket!</li>";
-        } else if (pstyle === "pizza") {
+        } else if (mood === "pizza") {
           plan += "<li>Order pizza or pasta directly to your room using the Disney Resorts Room Service app — great for a quiet night in.</li>";
-        } else if (pstyle === "carriage") {
-          plan += "<li>Reserve a horse-drawn carriage ride through the Sassagoula River area (available most evenings, check with the front desk).</li>";
+        } else if (mood === "carriage") {
+          plan += "<li>Reserve a horse-drawn carriage ride through the Sassagoula River area (check availability with the front desk).</li>";
         } else {
           plan += "<li>Take the scenic boat ride to Disney Springs for late-night treats or to catch live music at the Waterside Stage.</li>";
         }
       }
-
       plan += "</ul>";
       document.getElementById("cards-container").innerHTML = "";
       document.getElementById("plan-output").innerHTML = plan;
     }
-
-    function resetForm() {
-      window.location.reload();
-    }
   </script>
-
 </body>
 </html>
